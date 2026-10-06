@@ -6,4 +6,3 @@ pages:
   artifacts:
     paths:
       - public
-  pages: true
