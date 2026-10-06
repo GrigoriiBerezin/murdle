@@ -218,6 +218,23 @@ function cycleCell(group, row, col) {
   const key = cellKey(group, row, col);
   const current = state.matrix[key] || 0;
   state.matrix[key] = current === 0 ? 1 : current === 1 ? -1 : 0;
+
+  if (state.matrix[key] === 1) {
+    const groupDef = matrixTypes.find(g => g.key === group);
+    groupDef.rows.forEach(r => {
+      if (r.id !== row) {
+        const k = cellKey(group, r.id, col);
+        if (!state.matrix[k] || state.matrix[k] === 1) state.matrix[k] = -1;
+      }
+    });
+    groupDef.cols.forEach(c => {
+      if (c.id !== col) {
+        const k = cellKey(group, row, c.id);
+        if (!state.matrix[k] || state.matrix[k] === 1) state.matrix[k] = -1;
+      }
+    });
+  }
+
   saveState();
   renderMatrix();
 }
