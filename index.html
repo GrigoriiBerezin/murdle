@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#191714">
+  <title>Дело №0810 — День рождения Анны</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="paper-noise"></div>
+
+  <header class="topbar">
+    <div class="case-mark">CASE №0810</div>
+    <div class="topbar-status"><span class="status-dot"></span> ДЕЛО ОТКРЫТО</div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="classified">CONFIDENTIAL</div>
+      <p class="eyebrow">ДЕНЬ РОЖДЕНИЯ АННЫ · РАССЛЕДОВАНИЕ № 01</p>
+      <h1>Четыре подарка</h1>
+      <p class="lead">
+        Кто где находился и какой подарок оказался у каждого?
+        Следствие особенно интересует одно сочетание: <strong>кто был в Палкине и что он принёс?</strong>
+      </p>
+    </section>
+
+    <section class="briefing">
+      <div class="section-label">ЗАДАЧА</div>
+      <p>
+        В деле фигурируют четыре подозреваемых, четыре места и четыре подарка.
+        Каждая сущность встречается ровно один раз. Используй улики и матрицу,
+        чтобы восстановить всю картину.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">ПОДОЗРЕВАЕМЫЕ</div>
+          <h2>Кто мог это сделать?</h2>
+        </div>
+      </div>
+      <div class="cards" id="peopleCards"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">МЕСТА</div>
+          <h2>Где были замечены?</h2>
+        </div>
+      </div>
+      <div class="cards" id="placeCards"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">ПРЕДМЕТЫ</div>
+          <h2>Что они несли?</h2>
+        </div>
+      </div>
+      <div class="cards" id="itemCards"></div>
+    </section>
+
+    <section class="section clues-section">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">МАТЕРИАЛЫ ДЕЛА</div>
+          <h2>Улики</h2>
+        </div>
+        <div class="progress" id="clueProgress">0 / 4</div>
+      </div>
+      <div class="clues" id="clues"></div>
+    </section>
+
+    <section class="section matrix-section">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">ДЕДУКТИВНАЯ МАТРИЦА</div>
+          <h2>Сопоставь факты</h2>
+        </div>
+        <button class="ghost-btn" id="resetMatrix">Сбросить матрицу</button>
+      </div>
+
+      <div class="matrix-help">
+        Нажимай на клетки по очереди: <span class="yes">✓</span> — соответствует,
+        <span class="no">×</span> — исключается. Повторное нажатие очищает клетку.
+      </div>
+
+      <div class="matrix-wrap">
+        <div id="matrix"></div>
+      </div>
+    </section>
+
+    <section class="section answer-section">
+      <div class="answer-card">
+        <div class="section-label">ФИНАЛЬНЫЙ ВОПРОС</div>
+        <h2>Кто был в Палкине и что он принёс?</h2>
+
+        <div class="answer-grid">
+          <label>
+            <span>Подозреваемый</span>
+            <select id="answerPerson">
+              <option value="">Выбери...</option>
+            </select>
+          </label>
+          <label>
+            <span>Место</span>
+            <select id="answerPlace">
+              <option value="">Выбери...</option>
+            </select>
+          </label>
+          <label>
+            <span>Предмет</span>
+            <select id="answerItem">
+              <option value="">Выбери...</option>
+            </select>
+          </label>
+        </div>
+
+        <button class="solve-btn" id="solveBtn">ПРОВЕРИТЬ ВЕРСИЮ</button>
+        <div class="answer-message" id="answerMessage"></div>
+      </div>
+    </section>
+
+    <section class="case-closed hidden" id="caseClosed">
+      <div class="stamp">CASE<br>SOLVED</div>
+      <div>
+        <div class="section-label">ДЕЛО №0810</div>
+        <h2>Расследование завершено.</h2>
+        <p>
+          Ты установила, кто был в Палкине и какой подарок он принёс.
+          Но почему именно эти четыре человека оказались связаны с этим делом?
+        </p>
+        <button class="solve-btn secondary" id="continueBtn">ПРОДОЛЖИТЬ РАССЛЕДОВАНИЕ</button>
+      </div>
+    </section>
+
+    <footer>
+      <span>ДОСЬЕ №0810</span>
+      <span>ЛИЧНО ДЛЯ АННЫ</span>
+    </footer>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>

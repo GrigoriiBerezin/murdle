@@ -1,0 +1,9 @@
+pages:
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp index.html style.css game.js public/
+  artifacts:
+    paths:
+      - public
+  pages: true
