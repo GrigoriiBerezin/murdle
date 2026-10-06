@@ -293,6 +293,12 @@ body {
 .matrix-cell:hover { background: #e9e2d6; }
 .matrix-cell.yes { color: var(--green); background: rgba(49,95,70,.08); }
 .matrix-cell.no { color: var(--red); background: rgba(155,47,47,.07); }
+.matrix-cell.auto {
+  color: var(--muted);
+  background: rgba(0,0,0,.03);
+  cursor: default;
+}
+.matrix-cell.auto:hover { background: rgba(0,0,0,.03); }
 
 .ghost-btn {
   border: 1px solid var(--line);

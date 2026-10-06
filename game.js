@@ -214,25 +214,58 @@ function cellKey(group, row, col) {
   return `${group}:${row}:${col}`;
 }
 
+function removeAutoCrosses(group, row, col) {
+  const groupDef = matrixTypes.find(g => g.key === group);
+  groupDef.rows.forEach(r => {
+    if (r.id !== row) {
+      const k = cellKey(group, r.id, col);
+      if (state.matrix[k] === -2) state.matrix[k] = 0;
+    }
+  });
+  groupDef.cols.forEach(c => {
+    if (c.id !== col) {
+      const k = cellKey(group, row, c.id);
+      if (state.matrix[k] === -2) state.matrix[k] = 0;
+    }
+  });
+}
+
 function cycleCell(group, row, col) {
   const key = cellKey(group, row, col);
   const current = state.matrix[key] || 0;
+
+  if (current === -2) return;
+
   state.matrix[key] = current === 0 ? 1 : current === 1 ? -1 : 0;
 
   if (state.matrix[key] === 1) {
     const groupDef = matrixTypes.find(g => g.key === group);
     groupDef.rows.forEach(r => {
+      if (r.id !== row && state.matrix[cellKey(group, r.id, col)] === 1) {
+        state.matrix[cellKey(group, r.id, col)] = 0;
+        removeAutoCrosses(group, r.id, col);
+      }
+    });
+    groupDef.cols.forEach(c => {
+      if (c.id !== col && state.matrix[cellKey(group, row, c.id)] === 1) {
+        state.matrix[cellKey(group, row, c.id)] = 0;
+        removeAutoCrosses(group, row, c.id);
+      }
+    });
+    groupDef.rows.forEach(r => {
       if (r.id !== row) {
         const k = cellKey(group, r.id, col);
-        if (!state.matrix[k] || state.matrix[k] === 1) state.matrix[k] = -1;
+        if (!state.matrix[k]) state.matrix[k] = -2;
       }
     });
     groupDef.cols.forEach(c => {
       if (c.id !== col) {
         const k = cellKey(group, row, c.id);
-        if (!state.matrix[k] || state.matrix[k] === 1) state.matrix[k] = -1;
+        if (!state.matrix[k]) state.matrix[k] = -2;
       }
     });
+  } else if (state.matrix[key] === -1) {
+    removeAutoCrosses(group, row, col);
   }
 
   saveState();
@@ -253,9 +286,10 @@ function renderMatrix() {
       html += `<div class="cell row-header">${row.icon || ""} ${row.name}</div>`;
       group.cols.forEach(col => {
         const value = state.matrix[cellKey(group.key, row.id, col.id)] || 0;
-        const cls = value === 1 ? "yes" : value === -1 ? "no" : "";
-        const symbol = value === 1 ? "✓" : value === -1 ? "×" : "";
-        html += `<button class="cell matrix-cell ${cls}" aria-label="${row.name} — ${col.name}" data-group="${group.key}" data-row="${row.id}" data-col="${col.id}">${symbol}</button>`;
+        const cls = value === 1 ? "yes" : value === -1 ? "no" : value === -2 ? "auto" : "";
+        const symbol = value === 1 ? "✓" : value === -1 || value === -2 ? "×" : "";
+        const disabled = value === -2 ? "disabled" : "";
+        html += `<button class="cell matrix-cell ${cls}" ${disabled} aria-label="${row.name} — ${col.name}" data-group="${group.key}" data-row="${row.id}" data-col="${col.id}">${symbol}</button>`;
       });
     });
     html += `</div></div>`;
