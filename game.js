@@ -60,7 +60,7 @@ const places = [
     icon: "🏛️",
     facts: [
       ["Расположение", "Невский проспект"],
-      ["Назначение", "ресторан русской кухни"]
+      ["Назначение", "ресторан, где подают дичь"]
     ]
   },
   {
@@ -130,7 +130,7 @@ const clues = [
   "Оба кролика находились в квартирах. При этом спокойный и послушный кролик оказался именно в однокомнатной квартире.",
   "Подарок, который принёс кролик, который ест всё подряд, оказался одновременно самым тяжёлым и скоропортящимся из всех четырёх.",
   "Хозяйка кролика оказалась в месте, расположенном на острове. Подарок, который находился там, нельзя было съесть.",
-  "В ресторане русской кухни оказался подарок, который нельзя было оставить без воды. Человек, принесший этот подарок, не является кроликом."
+  "В ресторане, где подают дичь, оказался подарок, который нельзя было оставить без воды. Человек, принесший этот подарок, не является кроликом."
 ];
 
 const solution = {
@@ -154,15 +154,23 @@ function normalizeAnswer(text) {
 
 function loadState() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-      clueSeen: [],
-      matrix: {},
-      solved: false,
-      cipherSolved: false,
-      lockSolved: false
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    if (!saved.autoOwners) {
+      saved.autoOwners = {};
+      Object.keys(saved.matrix || {}).forEach(k => {
+        if (saved.matrix[k] === -2) saved.matrix[k] = 0;
+      });
+    }
+    return {
+      clueSeen: saved.clueSeen || [],
+      matrix: saved.matrix || {},
+      autoOwners: saved.autoOwners || {},
+      solved: saved.solved || false,
+      cipherSolved: saved.cipherSolved || false,
+      lockSolved: saved.lockSolved || false
     };
   } catch {
-    return { clueSeen: [], matrix: {}, solved: false, cipherSolved: false, lockSolved: false };
+    return { clueSeen: [], matrix: {}, autoOwners: {}, solved: false, cipherSolved: false, lockSolved: false };
   }
 }
 
@@ -188,12 +196,22 @@ function renderCards(targetId, data) {
 function renderClues() {
   const target = document.getElementById("clues");
   target.innerHTML = clues.map((clue, i) => `
-    <article class="clue">
+    <article class="clue ${state.clueSeen.includes(i) ? "done" : ""}" data-clue="${i}">
       <div class="clue-number">${String(i + 1).padStart(2, "0")}</div>
       <p>${clue}</p>
     </article>
   `).join("");
   document.getElementById("clueProgress").textContent = `${clues.length} / ${clues.length}`;
+  target.querySelectorAll(".clue").forEach(article => {
+    article.addEventListener("click", () => {
+      const i = Number(article.dataset.clue);
+      const idx = state.clueSeen.indexOf(i);
+      if (idx === -1) state.clueSeen.push(i);
+      else state.clueSeen.splice(idx, 1);
+      saveState();
+      renderClues();
+    });
+  });
 }
 
 const matrixTypes = [
@@ -227,18 +245,40 @@ function cellKey(group, row, col) {
   return `${group}:${row}:${col}`;
 }
 
-function removeAutoCrosses(group, row, col) {
+function checkTargets(group, row, col) {
   const groupDef = matrixTypes.find(g => g.key === group);
+  const targets = [];
   groupDef.rows.forEach(r => {
-    if (r.id !== row) {
-      const k = cellKey(group, r.id, col);
-      if (state.matrix[k] === -2) state.matrix[k] = 0;
-    }
+    if (r.id !== row) targets.push(cellKey(group, r.id, col));
   });
   groupDef.cols.forEach(c => {
-    if (c.id !== col) {
-      const k = cellKey(group, row, c.id);
+    if (c.id !== col) targets.push(cellKey(group, row, c.id));
+  });
+  return targets;
+}
+
+function markCheck(group, row, col) {
+  const checkKey = cellKey(group, row, col);
+  checkTargets(group, row, col).forEach(k => {
+    if (!state.matrix[k] || state.matrix[k] === -2) {
+      state.matrix[k] = -2;
+      state.autoOwners[k] = state.autoOwners[k] || [];
+      if (!state.autoOwners[k].includes(checkKey)) state.autoOwners[k].push(checkKey);
+    }
+  });
+}
+
+function unmarkCheck(group, row, col) {
+  const checkKey = cellKey(group, row, col);
+  checkTargets(group, row, col).forEach(k => {
+    const owners = state.autoOwners[k] || [];
+    const idx = owners.indexOf(checkKey);
+    if (idx !== -1) owners.splice(idx, 1);
+    if (owners.length === 0) {
       if (state.matrix[k] === -2) state.matrix[k] = 0;
+      delete state.autoOwners[k];
+    } else {
+      state.autoOwners[k] = owners;
     }
   });
 }
@@ -252,33 +292,16 @@ function cycleCell(group, row, col) {
   state.matrix[key] = current === 0 ? 1 : current === 1 ? -1 : 0;
 
   if (state.matrix[key] === 1) {
-    const groupDef = matrixTypes.find(g => g.key === group);
-    groupDef.rows.forEach(r => {
-      if (r.id !== row && state.matrix[cellKey(group, r.id, col)] === 1) {
-        state.matrix[cellKey(group, r.id, col)] = 0;
-        removeAutoCrosses(group, r.id, col);
+    checkTargets(group, row, col).forEach(k => {
+      if (state.matrix[k] === 1) {
+        const [r, c] = k.split(":").slice(1);
+        state.matrix[k] = 0;
+        unmarkCheck(group, r, c);
       }
     });
-    groupDef.cols.forEach(c => {
-      if (c.id !== col && state.matrix[cellKey(group, row, c.id)] === 1) {
-        state.matrix[cellKey(group, row, c.id)] = 0;
-        removeAutoCrosses(group, row, c.id);
-      }
-    });
-    groupDef.rows.forEach(r => {
-      if (r.id !== row) {
-        const k = cellKey(group, r.id, col);
-        if (!state.matrix[k]) state.matrix[k] = -2;
-      }
-    });
-    groupDef.cols.forEach(c => {
-      if (c.id !== col) {
-        const k = cellKey(group, row, c.id);
-        if (!state.matrix[k]) state.matrix[k] = -2;
-      }
-    });
+    markCheck(group, row, col);
   } else if (state.matrix[key] === -1) {
-    removeAutoCrosses(group, row, col);
+    unmarkCheck(group, row, col);
   }
 
   saveState();
@@ -343,9 +366,8 @@ function checkAnswer() {
     saveState();
     message.className = "answer-message success";
     message.innerHTML = "<strong>ВЕРСИЯ ПОДТВЕРЖДЕНА.</strong> Все три элемента совпадают.";
-    document.getElementById("caseClosed").classList.remove("hidden");
     document.getElementById("part2").classList.remove("hidden");
-    document.getElementById("caseClosed").scrollIntoView({ behavior: "smooth", block: "center" });
+    document.getElementById("part2").scrollIntoView({ behavior: "smooth", block: "start" });
   } else {
     message.className = "answer-message error";
     message.textContent = "Эта версия не подтверждается всеми уликами. Проверь матрицу и попробуй ещё раз.";
@@ -359,7 +381,6 @@ function restoreSolved() {
     document.getElementById("answerItem").value = solution.item;
     document.getElementById("answerMessage").className = "answer-message success";
     document.getElementById("answerMessage").innerHTML = "<strong>ДЕЛО УЖЕ РАСКРЫТО.</strong>";
-    document.getElementById("caseClosed").classList.remove("hidden");
   }
 }
 
@@ -370,10 +391,6 @@ document.getElementById("resetMatrix").addEventListener("click", () => {
 });
 
 document.getElementById("solveBtn").addEventListener("click", checkAnswer);
-
-document.getElementById("continueBtn").addEventListener("click", () => {
-  document.getElementById("part2").scrollIntoView({ behavior: "smooth", block: "start" });
-});
 
 document.getElementById("cipherBtn").addEventListener("click", () => {
   const input = document.getElementById("cipherInput").value;
@@ -409,6 +426,8 @@ document.getElementById("lockBtn").addEventListener("click", () => {
     saveState();
     message.className = "answer-message success";
     message.innerHTML = "<strong>ЗАМОК ОТКРЫТ.</strong> С днём рождения, Аня! 🎉";
+    document.getElementById("caseClosed").classList.remove("hidden");
+    document.getElementById("caseClosed").scrollIntoView({ behavior: "smooth", block: "center" });
   } else {
     message.className = "answer-message error";
     message.textContent = "Замок не поддаётся. Проверь ответы в книге.";
@@ -440,6 +459,7 @@ function restoreParts() {
     });
     document.getElementById("lockMessage").className = "answer-message success";
     document.getElementById("lockMessage").innerHTML = "<strong>ЗАМОК ОТКРЫТ.</strong> С днём рождения, Аня! 🎉";
+    document.getElementById("caseClosed").classList.remove("hidden");
   }
 }
 

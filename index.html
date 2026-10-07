@@ -135,28 +135,39 @@
         <div class="section-label">ДЕЛО №0810</div>
         <h2>Расследование завершено.</h2>
         <p>
-          Ты установила, кто был в Hunt и какой подарок он принёс.
-          Но почему именно эти четыре человека оказались связаны с этим делом?
+          Ты проявила смекалку и методы дедукции и доказала, что даже в свой день рождения
+          ты готова решать сложные задачи. Наслаждайся этим днём — на этом твои полномочия закончились.
         </p>
-        <button class="solve-btn secondary" id="continueBtn">ПРОДОЛЖИТЬ РАССЛЕДОВАНИЕ</button>
       </div>
     </section>
 
     <section class="section part2 hidden" id="part2">
-      <div class="section-heading">
-        <div>
-          <div class="section-label">ДЕЛО №0810-2</div>
-          <h2>Зашифрованное послание</h2>
-        </div>
+      <div class="hero part-hero">
+        <p class="eyebrow">ДЕНЬ РОЖДЕНИЯ АННЫ · РАССЛЕДОВАНИЕ № 02</p>
+        <h1>Зашифрованное послание</h1>
+        <p class="lead">
+          Вместе с букетом пришло зашифрованное послание.
+          Расшифруй его — внутри ключ к следующему шагу.
+        </p>
       </div>
 
-      <div class="clue evidence-clue">
-        <div class="clue-number">УЛ</div>
-        <div>
-          <div class="clue-title">ДОПОЛНИТЕЛЬНАЯ УЛИКА</div>
-          <p>Вещественное доказательство обнаружено вместе с цветами.</p>
-          <p>Следователь сообщает только следующее:</p>
-          <p class="quote">«Вспомни самого известного римского императора. Он любил двигать буквы. А ключ ищи в твоем сегодняшнем возрасте.»</p>
+      <div class="section clues-section">
+        <div class="section-heading">
+          <div>
+            <div class="section-label">МАТЕРИАЛЫ ДЕЛА</div>
+            <h2>Улики</h2>
+          </div>
+        </div>
+        <div class="clues">
+          <article class="clue evidence-clue">
+            <div class="clue-number">УЛ</div>
+            <div>
+              <div class="clue-title">ДОПОЛНИТЕЛЬНАЯ УЛИКА</div>
+              <p>Вещественное доказательство обнаружено вместе с цветами.</p>
+              <p>Следователь сообщает только следующее:</p>
+              <p class="quote">«Вспомни самого известного римского императора. Он любил двигать буквы. А ключ ищи в твоем сегодняшнем возрасте.»</p>
+            </div>
+          </article>
         </div>
       </div>
 
@@ -181,16 +192,17 @@
     </section>
 
     <section class="section part3 hidden" id="part3">
-      <div class="section-heading">
-        <div>
-          <div class="section-label">ДЕЛО №0810-3</div>
-          <h2>Замок</h2>
-        </div>
+      <div class="hero part-hero">
+        <p class="eyebrow">ДЕНЬ РОЖДЕНИЯ АННЫ · РАССЛЕДОВАНИЕ № 03</p>
+        <h1>Замок</h1>
+        <p class="lead">
+          Послание указывает на книгу. Ответы на последние четыре задания из неё откроют замок.
+        </p>
       </div>
 
       <div class="answer-card">
         <div class="section-label">ФИНАЛЬНЫЙ ЗАМОК</div>
-        <p class="hint">Ответы на последние четыре задания ищи в книге. Каждый ответ — одна буква.</p>
+        <p class="hint">Введи ответы на последние 4 задания из книги. Каждый ответ — одна буква (A–E).</p>
 
         <div class="lock-grid">
           <input maxlength="1" class="lock-input" id="lock0" placeholder="A" autocomplete="off">
