@@ -438,30 +438,6 @@ footer {
 }
 
 /* Part 2 & 3 */
-.part { position: relative; }
-.part-lock {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  background: rgba(25,23,20,.55);
-  backdrop-filter: blur(3px);
-  color: #f5f0e6;
-  text-align: center;
-  border-radius: 4px;
-}
-.part.locked .part-lock { display: flex; }
-.part.locked .part-lock-icon { font-size: 36px; }
-.part-lock-text {
-  font-size: 13px;
-  letter-spacing: .04em;
-  max-width: 260px;
-  line-height: 1.5;
-}
 .evidence-clue {
   background: rgba(250,248,243,.9);
   border-left: 3px solid var(--red);

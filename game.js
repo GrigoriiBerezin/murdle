@@ -344,7 +344,7 @@ function checkAnswer() {
     message.className = "answer-message success";
     message.innerHTML = "<strong>ВЕРСИЯ ПОДТВЕРЖДЕНА.</strong> Все три элемента совпадают.";
     document.getElementById("caseClosed").classList.remove("hidden");
-    document.getElementById("part2").classList.remove("locked");
+    document.getElementById("part2").classList.remove("hidden");
     document.getElementById("caseClosed").scrollIntoView({ behavior: "smooth", block: "center" });
   } else {
     message.className = "answer-message error";
@@ -388,7 +388,7 @@ document.getElementById("cipherBtn").addEventListener("click", () => {
     saveState();
     message.className = "answer-message success";
     message.innerHTML = "<strong>ПОСЛАНИЕ ПРОЧИТАНО.</strong> Замок ждёт свой ключ.";
-    document.getElementById("part3").classList.remove("locked");
+    document.getElementById("part3").classList.remove("hidden");
     document.getElementById("part3").scrollIntoView({ behavior: "smooth", block: "start" });
   } else {
     message.className = "answer-message error";
@@ -425,8 +425,8 @@ document.querySelectorAll(".lock-input").forEach((input, i) => {
 });
 
 function initParts() {
-  if (!state.solved) document.getElementById("part2").classList.add("locked");
-  if (!state.cipherSolved) document.getElementById("part3").classList.add("locked");
+  if (!state.solved) document.getElementById("part2").classList.add("hidden");
+  if (!state.cipherSolved) document.getElementById("part3").classList.add("hidden");
 }
 
 function restoreParts() {
