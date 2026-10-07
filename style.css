@@ -400,6 +400,7 @@ select {
   background: rgba(155,47,47,.045);
 }
 
+.hidden { display: none !important; }
 .case-closed.hidden { display: none; }
 
 .stamp {
