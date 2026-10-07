@@ -417,7 +417,7 @@ document.getElementById("lockBtn").addEventListener("click", () => {
 
 document.querySelectorAll(".lock-input").forEach((input, i) => {
   input.addEventListener("input", () => {
-    input.value = input.value.replace(/[^a-dA-D]/g, "");
+    input.value = input.value.replace(/[^a-eA-E]/g, "");
     if (input.value && i < 3) {
       document.getElementById(`lock${i + 1}`).focus();
     }
