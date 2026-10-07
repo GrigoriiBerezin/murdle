@@ -287,7 +287,7 @@ function cycleCell(group, row, col) {
 
 function renderMatrix() {
   const target = document.getElementById("matrix");
-  target.innerHTML = matrixTypes.map(group => {
+  target.innerHTML = `<div class="matrix-grid">${matrixTypes.map(group => {
     let html = `
       <div class="matrix-block">
         <div class="matrix-title">${group.title}</div>
@@ -307,7 +307,7 @@ function renderMatrix() {
     });
     html += `</div></div>`;
     return html;
-  }).join("");
+  }).join("")}</div>`;
 
   target.querySelectorAll(".matrix-cell").forEach(button => {
     button.addEventListener("click", () => {

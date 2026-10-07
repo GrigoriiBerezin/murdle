@@ -238,11 +238,18 @@ body {
 }
 
 #matrix {
-  min-width: 470px;
+  min-width: 900px;
   padding: 12px;
 }
 
-.matrix-block { margin-bottom: 28px; }
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.matrix-block { margin-bottom: 0; }
 .matrix-block:last-child { margin-bottom: 0; }
 
 .matrix-title {
@@ -431,6 +438,7 @@ footer {
   .case-closed { grid-template-columns: 1fr; }
   .stamp { margin: 0 auto; }
   .section-heading { align-items: flex-start; }
+  .matrix-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 430px) {
