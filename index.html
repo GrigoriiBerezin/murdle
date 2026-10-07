@@ -142,6 +142,68 @@
       </div>
     </section>
 
+    <section class="section part2 hidden" id="part2">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">ДЕЛО №0810-2</div>
+          <h2>Зашифрованное послание</h2>
+        </div>
+      </div>
+
+      <div class="clue evidence-clue">
+        <div class="clue-number">УЛ</div>
+        <div>
+          <div class="clue-title">ДОПОЛНИТЕЛЬНАЯ УЛИКА</div>
+          <p>Вещественное доказательство обнаружено вместе с цветами.</p>
+          <p>Следователь сообщает только следующее:</p>
+          <p class="quote">«Вспомни самого известного римского императора. Он любил двигать буквы. А ключ ищи в твоем сегодняшнем возрасте.»</p>
+        </div>
+      </div>
+
+      <div class="answer-card">
+        <div class="section-label">ВВЕДИ РАСШИФРОВАННЫЙ ТЕКСТ</div>
+        <p class="hint">Шифр придёт вместе с первым подарком — он будет вложен в букет.</p>
+
+        <input type="text" class="cipher-input" id="cipherInput" placeholder="Расшифрованный текст..." autocomplete="off" spellcheck="false">
+
+        <button class="solve-btn" id="cipherBtn">ПРОВЕРИТЬ</button>
+        <div class="answer-message" id="cipherMessage"></div>
+
+        <details class="hint-box">
+          <summary>Подсказка 1</summary>
+          <p>Ключ к шифру — 28.</p>
+        </details>
+        <details class="hint-box">
+          <summary>Подсказка 2</summary>
+          <p>Текст зашифрован шифром Цезаря: каждая буква сдвинута на ключ. Сдвинь буквы обратно, чтобы прочитать послание.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="section part3 hidden" id="part3">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">ДЕЛО №0810-3</div>
+          <h2>Замок</h2>
+        </div>
+      </div>
+
+      <div class="answer-card">
+        <div class="section-label">ФИНАЛЬНЫЙ ЗАМОК</div>
+        <p class="hint">Ответы на последние четыре задания ищи в книге. Каждый ответ — одна буква.</p>
+
+        <div class="lock-grid">
+          <input maxlength="1" class="lock-input" id="lock0" placeholder="A" autocomplete="off">
+          <input maxlength="1" class="lock-input" id="lock1" placeholder="B" autocomplete="off">
+          <input maxlength="1" class="lock-input" id="lock2" placeholder="C" autocomplete="off">
+          <input maxlength="1" class="lock-input" id="lock3" placeholder="D" autocomplete="off">
+        </div>
+
+        <button class="solve-btn" id="lockBtn">ОТКРЫТЬ ЗАМОК</button>
+        <div class="answer-message" id="lockMessage"></div>
+      </div>
+    </section>
+
     <footer>
       <span>ДОСЬЕ №0810</span>
       <span>ЛИЧНО ДЛЯ АННЫ</span>

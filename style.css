@@ -436,3 +436,77 @@ footer {
   .lead { font-size: 16px; }
   .section { padding-top: 38px; }
 }
+
+/* Part 2 & 3 */
+.evidence-clue {
+  background: rgba(250,248,243,.9);
+  border-left: 3px solid var(--red);
+  margin-bottom: 18px;
+}
+.clue-title {
+  font-size: 11px;
+  letter-spacing: .12em;
+  color: var(--red);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.quote {
+  font-style: italic;
+  color: #2c2822;
+  margin-top: 10px;
+}
+.hint {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 6px 0 14px;
+}
+.cipher-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-family: inherit;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: #2c2822;
+  margin-bottom: 12px;
+}
+.cipher-input:focus { outline: none; border-color: #c7a35d; }
+.hint-box {
+  margin-top: 10px;
+  border: 1px dashed var(--line);
+  background: rgba(250,248,243,.5);
+  padding: 10px 14px;
+}
+.hint-box summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #6b6459;
+  font-size: 13px;
+}
+.hint-box p {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #3f3a33;
+  line-height: 1.5;
+}
+.lock-grid {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 18px 0;
+}
+.lock-input {
+  width: 56px;
+  height: 64px;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  font-family: "Playfair Display", Georgia, serif;
+  text-transform: uppercase;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: #2c2822;
+}
+.lock-input:focus { outline: none; border-color: #c7a35d; }

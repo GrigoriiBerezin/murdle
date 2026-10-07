@@ -141,15 +141,28 @@ const solution = {
 
 const STORAGE_KEY = "birthday-murdle-case-0810-v1";
 
+const PART2_ANSWER = "аня я тебя люблю кенгуру две тысячи один десятый класс";
+const PART3_ANSWER = ["D", "E", "B", "B"];
+
+function normalizeAnswer(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function loadState() {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
       clueSeen: [],
       matrix: {},
-      solved: false
+      solved: false,
+      cipherSolved: false,
+      lockSolved: false
     };
   } catch {
-    return { clueSeen: [], matrix: {}, solved: false };
+    return { clueSeen: [], matrix: {}, solved: false, cipherSolved: false, lockSolved: false };
   }
 }
 
@@ -358,8 +371,74 @@ document.getElementById("resetMatrix").addEventListener("click", () => {
 document.getElementById("solveBtn").addEventListener("click", checkAnswer);
 
 document.getElementById("continueBtn").addEventListener("click", () => {
-  alert("Дело №2 пока засекречено.");
+  document.getElementById("part2").classList.remove("hidden");
+  document.getElementById("part2").scrollIntoView({ behavior: "smooth", block: "start" });
 });
+
+document.getElementById("cipherBtn").addEventListener("click", () => {
+  const input = document.getElementById("cipherInput").value;
+  const message = document.getElementById("cipherMessage");
+  if (!input.trim()) {
+    message.className = "answer-message error";
+    message.textContent = "Сначала введи расшифрованный текст.";
+    return;
+  }
+  if (normalizeAnswer(input) === PART2_ANSWER) {
+    state.cipherSolved = true;
+    saveState();
+    message.className = "answer-message success";
+    message.innerHTML = "<strong>ПОСЛАНИЕ ПРОЧИТАНО.</strong> Замок ждёт свой ключ.";
+    document.getElementById("part3").classList.remove("hidden");
+    document.getElementById("part3").scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    message.className = "answer-message error";
+    message.textContent = "Это не то послание. Проверь подсказки и попробуй ещё раз.";
+  }
+});
+
+document.getElementById("lockBtn").addEventListener("click", () => {
+  const values = [0, 1, 2, 3].map(i => document.getElementById(`lock${i}`).value.trim().toUpperCase());
+  const message = document.getElementById("lockMessage");
+  if (values.some(v => !v)) {
+    message.className = "answer-message error";
+    message.textContent = "Заполни все четыре поля.";
+    return;
+  }
+  if (values.every((v, i) => v === PART3_ANSWER[i])) {
+    state.lockSolved = true;
+    saveState();
+    message.className = "answer-message success";
+    message.innerHTML = "<strong>ЗАМОК ОТКРЫТ.</strong> С днём рождения, Аня! 🎉";
+  } else {
+    message.className = "answer-message error";
+    message.textContent = "Замок не поддаётся. Проверь ответы в книге.";
+  }
+});
+
+document.querySelectorAll(".lock-input").forEach((input, i) => {
+  input.addEventListener("input", () => {
+    input.value = input.value.replace(/[^a-dA-D]/g, "");
+    if (input.value && i < 3) {
+      document.getElementById(`lock${i + 1}`).focus();
+    }
+  });
+});
+
+function restoreParts() {
+  if (state.cipherSolved) {
+    document.getElementById("part2").classList.remove("hidden");
+    document.getElementById("cipherMessage").className = "answer-message success";
+    document.getElementById("cipherMessage").innerHTML = "<strong>ПОСЛАНИЕ ПРОЧИТАНО.</strong>";
+  }
+  if (state.lockSolved) {
+    document.getElementById("part3").classList.remove("hidden");
+    PART3_ANSWER.forEach((v, i) => {
+      document.getElementById(`lock${i}`).value = v;
+    });
+    document.getElementById("lockMessage").className = "answer-message success";
+    document.getElementById("lockMessage").innerHTML = "<strong>ЗАМОК ОТКРЫТ.</strong> С днём рождения, Аня! 🎉";
+  }
+}
 
 renderCards("peopleCards", people);
 renderCards("placeCards", places);
@@ -370,3 +449,4 @@ populateSelect("answerPerson", people);
 populateSelect("answerPlace", places);
 populateSelect("answerItem", items);
 restoreSolved();
+restoreParts();
