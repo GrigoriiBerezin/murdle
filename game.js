@@ -473,8 +473,8 @@ document.querySelectorAll(".lock-input").forEach((input, i) => {
 });
 
 function initParts() {
-  if (!state.solved) document.getElementById("part2").classList.add("hidden");
-  if (!state.cipherSolved) document.getElementById("part3").classList.add("hidden");
+  document.getElementById("part2").classList.toggle("hidden", !state.solved);
+  document.getElementById("part3").classList.toggle("hidden", !state.cipherSolved);
 }
 
 function restoreParts() {
