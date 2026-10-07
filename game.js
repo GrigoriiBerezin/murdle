@@ -216,10 +216,10 @@ const matrixTypes = [
   {
     key: "placesItems",
     title: "Что находилось где?",
-    rows: places,
-    cols: items,
-    rowLabel: "Место",
-    colLabel: "Предмет"
+    rows: items,
+    cols: places,
+    rowLabel: "Предмет",
+    colLabel: "Место"
   }
 ];
 
