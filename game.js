@@ -344,6 +344,7 @@ function checkAnswer() {
     message.className = "answer-message success";
     message.innerHTML = "<strong>ВЕРСИЯ ПОДТВЕРЖДЕНА.</strong> Все три элемента совпадают.";
     document.getElementById("caseClosed").classList.remove("hidden");
+    document.getElementById("part2").classList.remove("locked");
     document.getElementById("caseClosed").scrollIntoView({ behavior: "smooth", block: "center" });
   } else {
     message.className = "answer-message error";
@@ -371,7 +372,6 @@ document.getElementById("resetMatrix").addEventListener("click", () => {
 document.getElementById("solveBtn").addEventListener("click", checkAnswer);
 
 document.getElementById("continueBtn").addEventListener("click", () => {
-  document.getElementById("part2").classList.remove("hidden");
   document.getElementById("part2").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
@@ -388,7 +388,7 @@ document.getElementById("cipherBtn").addEventListener("click", () => {
     saveState();
     message.className = "answer-message success";
     message.innerHTML = "<strong>ПОСЛАНИЕ ПРОЧИТАНО.</strong> Замок ждёт свой ключ.";
-    document.getElementById("part3").classList.remove("hidden");
+    document.getElementById("part3").classList.remove("locked");
     document.getElementById("part3").scrollIntoView({ behavior: "smooth", block: "start" });
   } else {
     message.className = "answer-message error";
@@ -424,14 +424,17 @@ document.querySelectorAll(".lock-input").forEach((input, i) => {
   });
 });
 
+function initParts() {
+  if (!state.solved) document.getElementById("part2").classList.add("locked");
+  if (!state.cipherSolved) document.getElementById("part3").classList.add("locked");
+}
+
 function restoreParts() {
   if (state.cipherSolved) {
-    document.getElementById("part2").classList.remove("hidden");
     document.getElementById("cipherMessage").className = "answer-message success";
     document.getElementById("cipherMessage").innerHTML = "<strong>ПОСЛАНИЕ ПРОЧИТАНО.</strong>";
   }
   if (state.lockSolved) {
-    document.getElementById("part3").classList.remove("hidden");
     PART3_ANSWER.forEach((v, i) => {
       document.getElementById(`lock${i}`).value = v;
     });
@@ -449,4 +452,5 @@ populateSelect("answerPerson", people);
 populateSelect("answerPlace", places);
 populateSelect("answerItem", items);
 restoreSolved();
+initParts();
 restoreParts();
