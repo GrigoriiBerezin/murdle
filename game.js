@@ -291,7 +291,20 @@ function cycleCell(group, row, col) {
 
   state.matrix[key] = current === 0 ? 1 : current === 1 ? -1 : 0;
 
-  if (state.matrix[key] === 1) {
+  if (current === -1 && state.matrix[key] === 0) {
+    const groupDef = matrixTypes.find(g => g.key === group);
+    const owners = [];
+    groupDef.rows.forEach(r => {
+      if (r.id !== row && state.matrix[cellKey(group, r.id, col)] === 1) owners.push(cellKey(group, r.id, col));
+    });
+    groupDef.cols.forEach(c => {
+      if (c.id !== col && state.matrix[cellKey(group, row, c.id)] === 1) owners.push(cellKey(group, row, c.id));
+    });
+    if (owners.length > 0) {
+      state.matrix[key] = -2;
+      state.autoOwners[key] = owners;
+    }
+  } else if (state.matrix[key] === 1) {
     checkTargets(group, row, col).forEach(k => {
       if (state.matrix[k] === 1) {
         const [r, c] = k.split(":").slice(1);
