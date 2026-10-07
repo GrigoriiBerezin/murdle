@@ -416,6 +416,8 @@ document.getElementById("cipherBtn").addEventListener("click", () => {
 document.getElementById("lockBtn").addEventListener("click", () => {
   const values = [0, 1, 2, 3].map(i => document.getElementById(`lock${i}`).value.trim().toUpperCase());
   const message = document.getElementById("lockMessage");
+  const icon = document.getElementById("lockIcon");
+  const grid = document.getElementById("lockGrid");
   if (values.some(v => !v)) {
     message.className = "answer-message error";
     message.textContent = "Заполни все четыре поля.";
@@ -424,14 +426,28 @@ document.getElementById("lockBtn").addEventListener("click", () => {
   if (values.every((v, i) => v === PART3_ANSWER[i])) {
     state.lockSolved = true;
     saveState();
+    icon.textContent = "🔓";
+    icon.classList.add("unlocked");
     message.className = "answer-message success";
     message.innerHTML = "<strong>ЗАМОК ОТКРЫТ.</strong> С днём рождения, Аня! 🎉";
     document.getElementById("caseClosed").classList.remove("hidden");
     document.getElementById("caseClosed").scrollIntoView({ behavior: "smooth", block: "center" });
   } else {
+    icon.classList.remove("shake");
+    grid.classList.remove("shake");
+    void icon.offsetWidth;
+    icon.classList.add("shake");
+    grid.classList.add("shake");
     message.className = "answer-message error";
     message.textContent = "Замок не поддаётся. Проверь ответы в книге.";
   }
+});
+
+document.getElementById("lockIcon").addEventListener("animationend", () => {
+  document.getElementById("lockIcon").classList.remove("shake");
+});
+document.getElementById("lockGrid").addEventListener("animationend", () => {
+  document.getElementById("lockGrid").classList.remove("shake");
 });
 
 document.querySelectorAll(".lock-input").forEach((input, i) => {
@@ -457,6 +473,7 @@ function restoreParts() {
     PART3_ANSWER.forEach((v, i) => {
       document.getElementById(`lock${i}`).value = v;
     });
+    document.getElementById("lockIcon").textContent = "🔓";
     document.getElementById("lockMessage").className = "answer-message success";
     document.getElementById("lockMessage").innerHTML = "<strong>ЗАМОК ОТКРЫТ.</strong> С днём рождения, Аня! 🎉";
     document.getElementById("caseClosed").classList.remove("hidden");
