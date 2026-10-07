@@ -490,6 +490,12 @@ footer {
   margin-bottom: 12px;
 }
 .cipher-input:focus { outline: none; border-color: #c7a35d; }
+.hints-note {
+  margin: 16px 0 6px;
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
 .hint-clue {
   margin-top: 10px;
   border: 1px solid var(--line);
