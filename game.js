@@ -56,7 +56,7 @@ const places = [
   },
   {
     id: "palkin",
-    name: "Палкин",
+    name: "Hunt",
     icon: "🏛️",
     facts: [
       ["Расположение", "Невский проспект"],
