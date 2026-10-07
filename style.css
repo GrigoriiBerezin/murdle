@@ -490,23 +490,38 @@ footer {
   margin-bottom: 12px;
 }
 .cipher-input:focus { outline: none; border-color: #c7a35d; }
-.hint-box {
+.hint-clue {
   margin-top: 10px;
-  border: 1px dashed var(--line);
-  background: rgba(250,248,243,.5);
-  padding: 10px 14px;
-}
-.hint-box summary {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(250,248,243,.9);
+  padding: 14px 16px;
   cursor: pointer;
-  font-weight: 600;
-  color: #6b6459;
-  font-size: 13px;
 }
-.hint-box p {
-  margin: 8px 0 0;
-  font-size: 13px;
+.hint-clue summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: #6b6459;
+}
+.hint-clue summary::-webkit-details-marker { display: none; }
+.hint-clue summary::after {
+  content: "▾";
+  margin-left: auto;
+  color: var(--red);
+  transition: transform .2s;
+}
+.hint-clue[open] summary::after { transform: rotate(180deg); }
+.hint-clue .clue-number { font-size: 20px; line-height: 1; }
+.hint-clue p {
+  margin: 12px 0 0;
+  font-size: 14px;
   color: #3f3a33;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 .lock-grid {
   display: flex;
